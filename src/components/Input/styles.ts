@@ -4,7 +4,7 @@ import colors from '../../theme/colors';
 
 const styles = StyleSheet.create({
     container: {
-        margin: 30,
+        margin: 8,
         width: '100%',
     },
     input: {
@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 20,
         color: colors.text,
-        // fontFamily: 'AirbnbCeral-Medium',
     }
 });
 
