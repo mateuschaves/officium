@@ -1,13 +1,29 @@
-import React from 'react';
-import { View, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState } from 'react';
+import { View, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import AuthLabel from '../../components/AuthLabel';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import colors from '../../theme/colors';
 
+import api from '../../service/api';
+
 import styles from './styles';
 
 export default function Login({ navigation }) {
+
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    async function signin() {
+        setLoading(true);
+        api.post('/auth/signin', {email, password})
+            .then(() => {
+                Alert.alert('Login feito com sucesso 🙏', 'Agora so dale');
+            })
+            .catch(() => Alert.alert('Algo deu errado 😭', 'Verifique sua senha e tente novamente !'))
+            .finally(() => setLoading(false));
+    }
 
     function handleNotRegister() {
         navigation.navigate('Register');
@@ -30,6 +46,8 @@ export default function Login({ navigation }) {
                         autoFocus
                         autoCapitalize="none"
                         placeholderTextColor={colors.textLight}
+                        onChangeText={setEmail}
+                        value={email}
                     />
 
                     <Input 
@@ -38,8 +56,9 @@ export default function Login({ navigation }) {
                         keyboardType="default"
                         placeholderTextColor={colors.textLight}
                         secureTextEntry
+                        onChangeText={setPassword}
+                        value={password}
                     />
-
 
                     <AuthLabel 
                         title="Ainda não tem uma conta ?"
@@ -48,8 +67,8 @@ export default function Login({ navigation }) {
 
                     <Button 
                         title="Entrar"
-                        onPress={() => {}}
-                        loading={false}
+                        onPress={signin}
+                        loading={loading}
                     />
                 </View>
             </TouchableWithoutFeedback>

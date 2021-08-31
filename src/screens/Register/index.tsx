@@ -1,13 +1,33 @@
-import React from 'react';
-import { View, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState } from 'react';
+import { View, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import AuthLabel from '../../components/AuthLabel';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import colors from '../../theme/colors';
 
+import api from '../../service/api';
+
 import styles from './styles';
 
 export default function Register({ navigation }) {
+
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    async function signup() {
+        setLoading(true);
+        api.post('/auth/signup', {email, password})
+            .then(() => {
+                navigation.navigate('Login');
+            })
+            .catch((error) => {
+                Alert.alert('Algo deu errado 😭', 'Tente novamente mais tarde !')
+                console.log(error);
+            })
+            .finally(() => setLoading(false));
+    }
+
 
     function handleAlreadyRegister() {
         navigation.navigate('Login');
@@ -29,6 +49,8 @@ export default function Register({ navigation }) {
                         autoFocus
                         autoCapitalize="words"
                         placeholderTextColor={colors.textLight}
+                        onChangeText={setEmail}
+                        value={email}
                     />
 
                     <Input 
@@ -38,6 +60,8 @@ export default function Register({ navigation }) {
                         autoCorrect={false}
                         autoCapitalize="none"
                         placeholderTextColor={colors.textLight}
+                        onChangeText={setEmail}
+                        value={email}
                     />
 
                     <Input 
@@ -46,6 +70,8 @@ export default function Register({ navigation }) {
                         keyboardType="default"
                         placeholderTextColor={colors.textLight}
                         secureTextEntry
+                        onChangeText={setPassword}
+                        value={password}
                     />
 
                     <Input 
@@ -54,6 +80,8 @@ export default function Register({ navigation }) {
                         keyboardType="default"
                         placeholderTextColor={colors.textLight}
                         secureTextEntry
+                        onChangeText={setPassword}
+                        value={password}
                     />
 
 
@@ -64,7 +92,7 @@ export default function Register({ navigation }) {
 
                     <Button 
                         title="Cadastrar"
-                        onPress={() => {}}
+                        onPress={signup}
                         loading={false}
                     />
                 </View>
