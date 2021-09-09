@@ -2,8 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        width: 200,
+        width: '95%',
         backgroundColor: '#fff',
         borderRadius: 8,
         paddingTop: 8,
@@ -13,18 +12,21 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 1,
         elevation: 1,
-        marginRight: 16,
-        marginBottom: 20
+        marginBottom: 20,
     },
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-start',
         alignItems: 'center',
     },
     title: {
-        flex: 1,
-        fontSize: 12,
-        fontWeight: "700"
+        fontSize: 16,
+        fontWeight: "700",
+    },
+    price: {
+        fontSize: 16,
+        marginTop: 10,
+        fontWeight: "600",
     },
     image: {
         width: 54,
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
         margin: 8,
     },
     description: {
-        fontSize: 10,
+        fontSize: 14,
         fontWeight: '400',
         marginBottom: 30,
     }

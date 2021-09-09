@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, SafeAreaView, TouchableWithoutFeedback, Keyboard, ScrollView, Text } from 'react-native'
+import { View, SafeAreaView, TouchableWithoutFeedback, Keyboard, ScrollView, Text, TouchableOpacity } from 'react-native'
 
 import Header from '../../components/Header'
 import SearchInput from '../../components/SearchInput'
@@ -8,26 +8,50 @@ import images from '../../config/images'
 
 import styles from './styles'
 import Service from '../../components/Service'
-import { getToken } from '../../service/api'
+import api, { getToken } from '../../service/api'
 
-export default function Home() {
+import { Ionicons } from '@expo/vector-icons';
+
+interface ServiceProps {
+    id: number;
+    title: string;
+    description: string;
+    value: number;
+    category: string;
+}
+
+export default function Home({navigation}) {
 
     const [userType, setUserType] = useState(0);
+    const [userId, setUserId] = useState(0);
+    const [services, setServices] = useState<ServiceProps[]>([]);
 
     useEffect(() => {
+        navigation.addListener('focus', () => {
+            getServices()
+        });
         getToken()
-            .then((response: any) => {
-                setUserType(0)
+            .then((response) => {
+                console.log(response);
+                if (response?.type) {
+                    setUserType(response?.type)
+                    setUserId(response?.id)
+                }
             })
-            .catch()
     }, [])
 
-
+    useEffect(() => {
+        getServices()
+    }, [userId])
 
     function isClient() {
         return userType === 0;
     }
-    
+
+    async function getServices() {
+        api.get<ServiceProps[]>(`/service/provider/${userId}`)
+            .then(response => setServices(response.data));
+    }
 
     const categories = [
         {
@@ -57,33 +81,6 @@ export default function Home() {
         },
     ]
 
-    const services = [
-        {
-            title: 'Protótipo de aplicativo',
-            description: 'Desenvolvo toda a experiência de navegação do usuário dentro do seu aplicativo',
-            image: images.Design,
-            onPress: () => {}
-        },
-        {
-            title: 'Troca de resistência',
-            description: 'Troco a resistência do seu chuveiro',
-            image: images.Electric,
-            onPress: () => {}
-        },
-        {
-            title: 'Desenvolvimento Mobile',
-            description: 'Desenvolvo aplicativos para sua empresa',
-            image: images.Computer,
-            onPress: () => {}
-        },
-        {
-            title: 'Protótipo de aplicativo',
-            description: 'Desenvolvo toda a experiência de navegação do usuário dentro do seu aplicativo',
-            image: images.Design,
-            onPress: () => {}
-        }
-    ]
-
     return (
         <SafeAreaView style={styles.keyboard}>
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -109,7 +106,7 @@ export default function Home() {
                             image={"https://i.pravatar.cc/54"}
                             description={service.description}
                             title={service.title}
-                            onPress={service.onPress}
+                            onPress={() => {}}
                         />
                         )
                     }
@@ -129,10 +126,29 @@ export default function Home() {
                                 image={service.image}
                                 name={service.title}
                                 selected={service.selected}
+                                onPress={() => navigation.push('Services', {
+                                    category: service.title,
+                                })}
                             /> )
                         }
                 </View>
             </ScrollView>}
+
+            {
+                !isClient() && (
+                <TouchableOpacity 
+                    style={styles.fab}
+                    onPress={() => {
+                        navigation.navigate('NewService')
+                    }}
+                >
+                <Ionicons 
+                    name="add"
+                    color="#fff"
+                    size={35}
+                />
+            </TouchableOpacity>)
+            }
         </SafeAreaView>
     )
 }

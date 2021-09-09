@@ -9,8 +9,10 @@ export default function Splash({ navigation }) {
   useEffect(() => {
     async function showApp() {
         const token = await getToken();
-        if (token) {
-          navigation.naviate('Home')
+        if (token?.accessToken) {
+          navigation.navigate('Auth', {
+            screen: 'Home',
+          })
         } else {
           navigation.navigate('Auth')
         }

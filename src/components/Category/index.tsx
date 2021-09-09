@@ -7,13 +7,14 @@ interface CategoryProps {
     name: string;
     image: any;
     selected?: boolean;
+    onPress: () => void;
 }
 
-export default function Category({ name, image }: CategoryProps) {
+export default function Category({ name, image, onPress }: CategoryProps) {
     const [press, setPress] = useState(false);
 
     return (
-        <TouchableOpacity onPressIn={() => setPress(!press)} onPressOut={() => setPress(!press)} style={press ? styles.containerHover: styles.container}>
+        <TouchableOpacity onPress={onPress} onPressIn={() => setPress(!press)} onPressOut={() => setPress(!press)} style={press ? styles.containerHover: styles.container}>
             <Image 
                 style={styles.image}
                 source={image}

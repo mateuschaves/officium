@@ -8,9 +8,10 @@ interface ServiceProps {
     onPress: () => void;
     description: string;
     image: any;
+    price: number,
 }
 
-export default function Service({ title, onPress, description, image }: ServiceProps) {
+export default function VerticalService({ title, onPress, description, image, price }: ServiceProps) {
     return (
         <TouchableOpacity onPress={onPress} style={styles.container}>
             <View style={styles.header}>
@@ -18,16 +19,16 @@ export default function Service({ title, onPress, description, image }: ServiceP
                     source={{ uri: image}}
                     style={styles.image}
                 />
-                <Text style={styles.title}>{title}</Text>
+                <View>
+                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.price}>R$ {Number(price / 100).toFixed(2)}</Text>
+                </View>
             </View>
-
             <Text 
                 style={styles.description}
                 numberOfLines={2}
                 ellipsizeMode="tail"
-            >
-                {description}
-            </Text>
+            >{description}</Text>
         </TouchableOpacity>
     )
 }

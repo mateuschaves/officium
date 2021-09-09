@@ -4,7 +4,6 @@ import { View, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboar
 import AuthLabel from '../../components/AuthLabel';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import UserTypeContainer from '../../components/UserTypeContainer';
 
 import colors from '../../theme/colors';
 
@@ -20,15 +19,16 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [type, setType] = useState('Cliente');
 
     async function signin() {
         setLoading(true);
         api.post('/auth/signin', {email, password})
             .then(async ({ data }) => {
                 Alert.alert('Login feito com sucesso 🙏', 'Agora so dale');
-                const token: string = data.token;
+                const token: {accessToken: string, type: number, id: number} = data;
                 await saveToken(token);
+                console.log(token);
+                navigation.navigate('Home');
             })
             .catch(() => Alert.alert('Algo deu errado 😭', 'Verifique sua senha e tente novamente !'))
             .finally(() => setLoading(false));

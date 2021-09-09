@@ -14,17 +14,19 @@ export default function Register({ navigation }) {
 
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [type, setType] = useState('Cliente');
 
     async function signup() {
         setLoading(true);
-        api.post('/auth/signup', {email, password})
+        api.post('/auth/signup', {name, email, phone: type === 'Cliente' ? '' : phone , password, type: type === 'Cliente' ? 0 : 1 })
             .then(() => {
                 navigation.navigate('Login');
             })
             .catch((error) => {
+                console.log(error.response.data)
                 Alert.alert('Algo deu errado 😭', 'Tente novamente mais tarde !')
                 console.log(error);
             })
@@ -53,8 +55,8 @@ export default function Register({ navigation }) {
                                     autoFocus
                                     autoCapitalize="words"
                                     placeholderTextColor={colors.textLight}
-                                    onChangeText={setEmail}
-                                    value={email}
+                                    onChangeText={setName}
+                                    value={name}
                                 />
 
                                 <Input 
@@ -73,8 +75,8 @@ export default function Register({ navigation }) {
                                     placeholder="81 973248342"
                                     keyboardType="decimal-pad"
                                     placeholderTextColor={colors.textLight}
-                                    onChangeText={setEmail}
-                                    value={email}
+                                    onChangeText={setPhone}
+                                    value={phone}
                                 />
 
                                 <Input 

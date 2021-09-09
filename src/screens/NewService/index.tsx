@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Keyboard, TouchableWithoutFeedback, View, Text, Alert } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 
@@ -7,18 +7,28 @@ import Button from '../../components/Button'
 import styles from './styles';
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import api from '../../service/api';
+import api, { getToken } from '../../service/api';
 
 interface ServiceProps {
     title: string;
     description: string;
     value: number;
     categoryType: string;
+    userId: number;
 }
 
 interface CategoryProps {
     name: string;
     value: number;
+}
+
+enum CategoryType {
+    TI = 1,
+    CLEANING,
+    ELETRIC,
+    CONSTRUCTION,
+    HYDRAULIC,
+    DESIGN,
 }
 
 export default function NewService({ navigation }) {
@@ -55,6 +65,16 @@ export default function NewService({ navigation }) {
         }
     ])
 
+    const [userId, setUserId] = useState(0);
+
+    useEffect(() => {
+        getToken()
+            .then((response) => {
+                if (response?.id)
+                setUserId(response?.id)
+            })
+    }, [])
+
     async function createService(data: ServiceProps) {
         return api.post<ServiceProps>('/service', data);
     }
@@ -71,7 +91,8 @@ export default function NewService({ navigation }) {
             title,
             description,
             value,
-            categoryType: String((category?.value || '1') || '1')
+            categoryType: CategoryType[category?.value || 1],
+            userId,
         }
 
         createService(serviceToCreate)
