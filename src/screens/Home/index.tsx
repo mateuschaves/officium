@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, SafeAreaView, TouchableWithoutFeedback, Keyboard, ScrollView, Text } from 'react-native'
 
 import Header from '../../components/Header'
@@ -8,8 +8,26 @@ import images from '../../config/images'
 
 import styles from './styles'
 import Service from '../../components/Service'
+import { getToken } from '../../service/api'
 
 export default function Home() {
+
+    const [userType, setUserType] = useState(0);
+
+    useEffect(() => {
+        getToken()
+            .then((response: any) => {
+                setUserType(0)
+            })
+            .catch()
+    }, [])
+
+
+
+    function isClient() {
+        return userType === 0;
+    }
+    
 
     const categories = [
         {
@@ -76,30 +94,32 @@ export default function Home() {
                 </View>
             </TouchableWithoutFeedback>
 
-            <Text style={styles.title}>
-                Em alta
+           <Text style={styles.title}>
+                {isClient() ? 'Em alta' : 'Seus serviços'}
             </Text>
 
             <ScrollView
                 showsHorizontalScrollIndicator={false}
                 horizontal
             >
-                {
-                    services.map((service, index ) => <Service
-                        key={index}
-                        image={"https://i.pravatar.cc/54"}
-                        description={service.description}
-                        title={service.title}
-                        onPress={service.onPress}
-                    />
-                    )
-                }
+                <View style={styles.services}>
+                    {
+                        services.map((service, index ) => <Service
+                            key={index}
+                            image={"https://i.pravatar.cc/54"}
+                            description={service.description}
+                            title={service.title}
+                            onPress={service.onPress}
+                        />
+                        )
+                    }
+                </View>
             </ScrollView>
 
-            <Text style={styles.title}>
+            {isClient() && <Text style={styles.title}>
                 Categorias
-            </Text>
-            <ScrollView
+            </Text>}
+            {isClient() && <ScrollView
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.services}>
@@ -112,7 +132,7 @@ export default function Home() {
                             /> )
                         }
                 </View>
-            </ScrollView>
+            </ScrollView>}
         </SafeAreaView>
     )
 }

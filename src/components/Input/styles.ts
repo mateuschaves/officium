@@ -4,7 +4,7 @@ import colors from '../../theme/colors';
 
 const styles = StyleSheet.create({
     container: {
-        margin: 8,
+        marginVertical: 8,
         width: '100%',
     },
     input: {

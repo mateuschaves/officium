@@ -1,25 +1,34 @@
 import React, { useState } from 'react';
 import { View, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+
 import AuthLabel from '../../components/AuthLabel';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import UserTypeContainer from '../../components/UserTypeContainer';
+
 import colors from '../../theme/colors';
 
-import api from '../../service/api';
+import api, { saveToken } from '../../service/api';
 
 import styles from './styles';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Login({ navigation }) {
+export default function Login() {
+
+    const navigation = useNavigation<any>();
 
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [type, setType] = useState('Cliente');
 
     async function signin() {
         setLoading(true);
         api.post('/auth/signin', {email, password})
-            .then(() => {
+            .then(async ({ data }) => {
                 Alert.alert('Login feito com sucesso 🙏', 'Agora so dale');
+                const token: string = data.token;
+                await saveToken(token);
             })
             .catch(() => Alert.alert('Algo deu errado 😭', 'Verifique sua senha e tente novamente !'))
             .finally(() => setLoading(false));

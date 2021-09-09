@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import colors from "../../theme/colors";
 
 const styles = StyleSheet.create({
     container: {
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
         elevation: 1,
     },
     containerHover: {
-        backgroundColor: '#6838c8',
+        backgroundColor: colors.primary,
         borderRadius: 8,
         width: "45%",
         height: 150,
