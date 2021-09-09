@@ -6,6 +6,7 @@ import RegisterScreen from '../screens/Register';
 import HomeScreen from '../screens/Home';
 import NewServiceScreen from '../screens/NewService';
 import ServicesScreen from '../screens/Services';
+import ServiceScreen from '../screens/Service';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ export default function AuthNavigator() {
             <Stack.Screen name="NewService" component={NewServiceScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Services" component={ServicesScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Service" component={ServiceScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }

@@ -60,7 +60,7 @@ export default function Services({navigation, route}) {
                             key={service.id}
                             title={service.title}
                             image="https://i.pravatar.cc/54"
-                            onPress={()=>{}}
+                            onPress={() => navigation.navigate('Service', service)}
                             price={service.value}
                             description={service.description}
                         />)
